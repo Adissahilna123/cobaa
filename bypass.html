@@ -1,1 +1,80 @@
-<a href="about:history-frame" target="x" onclick="setTimeout('d()', 2000);">Click Me</a>
+<!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css">
+      body, body > div { height: 100%; }
+      body > img { visibility: hidden; }
+      body > div, body > div > img { border: solid 1px black; }
+      body > div {
+        word-wrap: break-word;
+        width: 100%;
+        padding: 10px;
+        margin: auto; }
+    </style>
+    <meta charset="UTF-8" />
+    <script charset="utf-8">
+      function logToPage(msg, container) {
+        var log = document.createElement('p');
+        log.textContent = msg;
+        container.appendChild(log);
+      };
+      function logImg(data, container) {
+        logToPage(data, container);
+        var img = document.createElement('img');
+        img.src = data;
+        container.appendChild(img);
+      };
+      function logDataVia2D() {
+        var log = document.getElementById('2D' +
+          (this.getAttribute('crossorigin') ? '_XOrigin ' : ''));
+        try {
+          var can = document.createElement('canvas');
+          var ctx = can.getContext('2d');
+          ctx.drawImage(this, 0, 0);
+          logImg(can.toDataURL(), log);
+        } catch(err) {
+          logToPage(err.message, log);
+        }
+      }
+      function logDataViaBitmap() {
+        var log = document.getElementById('Bitmap' +
+          (this.getAttribute('crossorigin') ? '_XOrigin ' : ''));
+        try {
+          createImageBitmap(this, 0, 0, this.naturalWidth,
+            this.naturalHeight).then(function(bmap) {
+            var can = document.createElement('canvas');
+            var ctx = can.getContext('bitmaprenderer');
+            ctx.transferFromImageBitmap(bmap);
+            logImg(can.toDataURL(), log);
+          });
+        } catch(err) {
+          logToPage(err.message, log);
+        }
+      }
+      function logData() {
+        logDataVia2D.call(this);
+        logDataViaBitmap.call(this);
+      };
+      window.onload = function () {
+        var targetOrigin = 'http://127.0.0.1:58080'
+        // without crossorigin
+        var img = document.createElement('img');
+        img.src = targetOrigin + '/secret.png';
+        img.onload = logData;
+        document.body.appendChild(img);
+        // with crossorigin
+        var img = document.createElement('img');
+        img.setAttribute('crossorigin', 'use-credentials');
+        img.src = targetOrigin + '/secret.png?withXorigin';
+        img.onload = logData;
+        document.body.appendChild(img);
+      };
+    </script>
+  </head>
+  <body>
+    <div id="2D"><p>Data via 2D canvas:</p></div>
+    <div id="2D_XOrigin"><p>Data via 2D canvas (with crossorigin):</p></div>
+    <div id="Bitmap"><p>Data via bitmap canvas:</p></div>
+    <div id="Bitmap_XOrigin"><p>Data via bitmap canvas (with crossorigin):</p></div>
+  </body>
+</html>
