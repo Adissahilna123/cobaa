@@ -1,1 +1,5 @@
-<iframe srcdoc="<script>document.location='1.php'</script>"></iframe>
+<script type="text/javascript">
+  var x = '<html><body><script type="text/javascript"> window.top.location = "https://google.com";' + '</scr' + 'ipt></body></html>';
+  var bs64 = btoa(x);
+  document.write('<iframe sandbox="allow-top-navigation allow-scripts" src="data:text/html;base64,' + bs64 + '"></iframe>')
+</script>
