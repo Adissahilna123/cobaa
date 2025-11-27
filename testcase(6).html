@@ -1,79 +1,31 @@
-<html>
-
-<head>
-
-</head>
-<div id="local">
-    <video autoplay playsinline></video>
-</div>
-
-<div id="remote">
-    <video autoplay playsinline></video>
-</div>
-
-<body>
-    <script type="module">
-        function createIframes() {
-            if (top != self) return;
-            for (var i = 0; i < 5; i++) {
-                var iframe = document.createElement('iframe');
-                iframe.src = location.href;
-                iframe.style.display = 'none';
-                document.body.appendChild(iframe);
+<script>
+    (async () => {
+        const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+        async function isRedirect (url1) {
+            const startTime = performance.now();
+            const a = await fetch(url1, { 'mode': 'no-cors', credentials: 'include', cache: 'no-store' });
+            const endTime = performance.now();
+            const timeTaken = endTime - startTime;
+            await sleep(1000);
+            const performanceEntry = performance.getEntriesByName(url1)[0];
+            const reportedDuration = performanceEntry.duration;
+            console.log(`Time taken for ${url1} to load: ${timeTaken}`);
+            console.log(`Reported time taken for ${url1} to load: ${reportedDuration}`);
+            // console.log(performanceEntry);
+            if ( (timeTaken - reportedDuration) > 5 ) {
+                console.log(`${url1} is a redirect?`);
+                return true;
+            } else {
+                console.log(`${url1} is not a redirect`);
+                return false;
             }
         }
-        createIframes();
-        async function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
-        async function exchangeIceCandidates(pc1, pc2) {
-            const offer = await pc1.createOffer();
-            await pc1.setLocalDescription(offer);
-            await pc2.setRemoteDescription(offer);
-            const answer = await pc2.createAnswer();
-            await pc2.setLocalDescription(answer);
-            await pc1.setRemoteDescription(answer);
-        }
-        var pc1;
-        var pc2;
-        async function main() {
-            var stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
-            document.querySelector('div#local video').srcObject = stream;
-								alert();
-
-            pc1 = new RTCPeerConnection();
-            pc2 = new RTCPeerConnection();
-            stream.getTracks().forEach(track => pc1.addTrack(track, stream));
-            pc1.onicecandidate = e => pc2.addIceCandidate(e.candidate);
-            pc2.ontrack = e => document.querySelector('div#remote video').srcObject = e.streams[0];
-            await exchangeIceCandidates(pc1, pc2);
-            await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
-            pc1.getSenders().forEach(async sender => {
-
-                let params = sender.getParameters();
-                params.encodings[0].active = false;
-                await sender.setParameters(params);
-            });
-        }
-        await main().catch(e => {
-		print();
-		    print();
-            console.log(e);
-            gc();
-            location.reload();
-        });
-
-        setTimeout(function () {
-            location.reload();
-        }, 3000);
-
-
-
-
-
-
-
-
-
-
-    </script>
+        const url1 = 'https://google.com/';
+        const url2 = 'https://www.google.com/';
+        console.log('Starting test');
+        await isRedirect(url1);
+        await isRedirect(url2);
+        console.log('Finished test');
+        
+    })();
+</script>
