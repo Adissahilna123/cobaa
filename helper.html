@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FSA Safe Demo (macOS)</title>
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; padding: 28px; max-width: 820px; }
+    button { padding: 10px 14px; margin: 6px 0; border-radius: 8px; border: 1px solid #ccc; background: #f7f7f7; cursor: pointer; }
+    pre { background:#f3f3f3; padding:12px; border-radius:8px; overflow:auto; }
+    .status { margin-top:10px; color:#333; }
+    label { display:block; margin-top:12px; font-weight:600; }
+  </style>
+</head>
+<body>
+  <h1>File System Access API — Demo Aman</h1>
+  <p>Demo ini <strong>tidak</strong> mencoba mengakses folder sistem. Gunakan folder uji (mis. Desktop/TestFiles) dan file teks biasa untuk percobaan.</p>
+
+  <button id="pickFile">Pilih File (showOpenFilePicker)</button>
+  <button id="pickDir">Pilih Direktori (showDirectoryPicker)</button>
+  <button id="readFile" disabled>Baca Isi File Terpilih</button>
+
+  <div class="status" id="info">Belum ada file atau direktori yang dipilih.</div>
+
+  <label>File/Directory info:</label>
+  <pre id="meta">—</pre>
+
+  <label>Isi file (jika teks):</label>
+  <pre id="content">—</pre>
+
+<script>
+  let chosenFileHandle = null;
+  let chosenDirHandle = null;
+
+  const infoEl = document.getElementById('info');
+  const metaEl = document.getElementById('meta');
+  const contentEl = document.getElementById('content');
+  const pickFileBtn = document.getElementById('pickFile');
+  const pickDirBtn = document.getElementById('pickDir');
+  const readFileBtn = document.getElementById('readFile');
+
+  function safeDisplayMeta(meta) {
+    metaEl.textContent = JSON.stringify(meta, null, 2);
+  }
+
+  pickFileBtn.addEventListener('click', async () => {
+    contentEl.textContent = '—';
+    try {
+      // meminta user memilih file (user gesture diperlukan)
+      const [fileHandle] = await window.showOpenFilePicker({
+        multiple: false,
+        types: [
+          { description: 'Text files', accept: {'text/plain': ['.txt','.md','.log'] } },
+          { description: 'All files', accept: {'*/*': ['.*']} }
+        ]
+      });
+      chosenFileHandle = fileHandle;
+      chosenDirHandle = null;
+      infoEl.textContent = `File dipilih: ${fileHandle.name}`;
+      readFileBtn.disabled = false;
+      safeDisplayMeta({ name: fileHandle.name, kind: fileHandle.kind });
+    } catch (err) {
+      infoEl.textContent = 'File picker dibatalkan atau tidak tersedia.';
+      console.warn(err);
+    }
+  });
+
+  pickDirBtn.addEventListener('click', async () => {
+    contentEl.textContent = '—';
+    try {
+      // meminta user memilih direktori
+      const dirHandle = await window.showDirectoryPicker();
+      chosenDirHandle = dirHandle;
+      chosenFileHandle = null;
+      infoEl.textContent = `Direktori dipilih: ${dirHandle.name}`;
+      readFileBtn.disabled = true;
+      // Tampilkan daftar file/entri (tanpa membaca isi file)
+      const entries = [];
+      for await (const entry of dirHandle.values()) {
+        entries.push({ name: entry.name, kind: entry.kind });
+      }
+      safeDisplayMeta({ dirName: dirHandle.name, entries });
+    } catch (err) {
+      infoEl.textContent = 'Directory picker dibatalkan atau tidak tersedia.';
+      console.warn(err);
+    }
+  });
+
+  readFileBtn.addEventListener('click', async () => {
+    if (!chosenFileHandle) return;
+    try {
+      // Meminta permission baca (user gesture)
+      const permission = await chosenFileHandle.requestPermission({ mode: 'read' });
+      if (permission !== 'granted') {
+        infoEl.textContent = 'Izin baca tidak diberikan.';
+        return;
+      }
+      const file = await chosenFileHandle.getFile();
+      const text = await file.text(); // hanya membaca sebagai teks
+      contentEl.textContent = text.slice(0, 50_000); // batasi ukuran yang ditampilkan
+      infoEl.textContent = `Membaca file: ${chosenFileHandle.name} — ukuran ${file.size} bytes`;
+    } catch (err) {
+      infoEl.textContent = 'Gagal membaca file. Periksa izin atau tipe file.';
+      console.error(err);
+    }
+  });
+
+  // deteksi ketersediaan API (degradasi graceful)
+  if (!window.showOpenFilePicker && !window.showDirectoryPicker) {
+    infoEl.textContent = 'Browser ini tidak mendukung File System Access API. Coba Chrome/Edge versi terbaru atau gunakan flag eksperimen.';
+    pickFileBtn.disabled = true;
+    pickDirBtn.disabled = true;
+  }
+</script>
+</body>
+</html>
