@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        #content {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button id="button"> Button</button>
+
+    <div id="content">
+        Press enter
+    </div>
+
+    <script>
+        const spoof = async () => {
+
+            const popupPip = await documentPictureInPicture.requestWindow({
+                width: 350,
+                height: 400
+            });
+
+            popupPip.document.body.append(content);
+        };
+
+        button.onclick = spoof;
+    </script>
+</body>
+
+</html>
