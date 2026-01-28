@@ -11,15 +11,8 @@ html { font-family: sans-serif; }
 </head>
 <body>
 <div id="mainContent">
-<h1>PoC: File/dir picker obscured by PiP</h1>
-<h2>Leak env vars, read/write files</h2>
-<p>PoC works with showOpenFilePicker(), showSaveFilePicker(), showDirectoryPicker().</p>
-<p>After patch for crbug.com/40076120, PiP obscuring is mitigated only for input type=file element (either by closing or tucking PiP window).</p>
-<p>Variations:
     <ul>
         <li><a href="?">Read environment variables</a> (Default)</li>
-        <li><a href="?mode=readfile">Read file at arbitrary location</a></li>
-        <li><a href="?mode=writefile">Write file at arbitrary location</a></li>
     </ul>
 </p>
 </div>
@@ -57,7 +50,7 @@ if (!isPopup) {
         }
     });
 
-    instructions.innerText = 'Press any key twice\n(or press and hold any key)';
+    instructions.innerText = 'Press enter';
 
 } else {
     // Logic for popup
@@ -71,7 +64,7 @@ if (!isPopup) {
     setTimeout(() => {
         // Show instructions if we haven't received 2nd keypress
         if (pipWin) { return; }
-        instructions.innerText = 'Press key once more';
+        instructions.innerText = 'Press enter once more';
     }, 1000);
 
     const pickerOpts = {
