@@ -1,33 +1,22 @@
-<a id="button" href="#">
-    <img src="https://t1.kakaocdn.net/kakaocorp/corp_thumbnail/Kakao.png" 
-         alt="Kakao Logo" width="150">
-    <br>
-</a>
+
+
+<img id="button" src="https://t1.kakaocdn.net/kakaocorp/corp_thumbnail/Kakao.png">
+
 
 <script>
-var s = "https://kakaocorp.com";
-var button = document.getElementById("button");
+var s="https://kakaocorp.com";
+var button=document.getElementById("button");
+button.href=s;
+var qwin;
+button.onclick=function(e){
 
-button.addEventListener("click", function(e) {
-    e.preventDefault();
-
-    var qwin = window.open("", "toolbar=no,height=350,width=305");
-
-    setTimeout(function() {
-
-        // Set title
-        qwin.document.title = s;
-
-        // Tambahkan teks dengan cara aman
-        var text = qwin.document.createElement("p");
-        text.textContent = "Ini adalah halaman yang dibuka dari tombol Kakao.";
-
-        // Buat iframe secara aman
-        var iframe = qwin.document.createElement("iframe");
-
-        // Tambahkan ke body
-        qwin.document.body.appendChild(text);
-
-    }, 333);
-});
+	qwin=open('javascript:alert(1)',"toolbar=no,height=350,width=305");
+	setTimeout(function(){
+		qwin.document.title=s;
+		qwin.document.body.innerHTML=`<spam>
+		
+		`;
+		
+	},333)
+return false;}
 </script>
