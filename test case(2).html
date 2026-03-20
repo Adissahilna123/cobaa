@@ -1,0 +1,53 @@
+<body>
+<div>Click cmd+p try to print this page</div>
+
+</body>
+
+<style>
+#aaa{
+position:absolute;
+left:35%;
+}
+#bbb{
+display:none;
+}
+</style>
+<script>
+
+var w;
+var t;
+function foo(){
+
+t = setInterval('bar()',1);
+}
+
+function bar(){
+try{
+w.location.href;
+}
+catch(e){
+clearInterval(t);
+aaa = document.getElementById("aaa");
+aaa.style.opacity = '0';
+aaa.oninvalid = function (e) {
+e.target.setCustomValidity("WARNINGR COMPR COMPR COMPR COMP COMPR COMPR COMPR COMPR COMPUTERNGR COMPR COMPR COMPR COMP COMPR COMPR COMPR COMPR COMPUTERNGR COMPR COMPR COMPR COMP COMPR COMPR COMPR COMPR COMPUTERNGR COMPR COMPR COMPR COMP COMPR COMPR COMPR COMPR COMPUTERNGR COMPR COMPR COMPR COMP COMPR COMPR COMPR COMPR COMPUTERNGR COMPR COMPR COMPR COMP COMPR COMPR COMPR COMPR COMPUTERNGR COMPR COMPR COMPR COMP COMPR COMPR COMPR COMPR COMPUTERNGR COMPR COMPR COMPR COMP COMPR COMPR COMPR COMPR COMPUTERNGR COMPR COMPR COMPR COMP COMPR COMPR COMPR COMPR COMPUTERNGR COMPR COMPR COMPR COMP COMPR COMPR COMPR COMPR COMPUTERNGR COMPR COMPR COMPR COMP COMPR COMPR COMPR COMPR COMPUTERNGR COMPR COMPR COMPR COMP COMPR COMPR COMPR COMPR COMPUTERNGR COMPR COMPR COMPR COMP COMPR COMPR COMPR COMPR COMPUTER") 
+};
+}
+
+}
+
+</script><script>
+var mediaQueryList = window.matchMedia('print');
+mediaQueryList.addListener(function(mql) {
+    if (mql.matches) {
+
+	document.getElementById('bbb').click();
+	window.open('https://www.google.com')
+        
+    };
+});
+</script>
+<form>
+    <input placeholder="aaa" required id="aaa" />
+    <input id='bbb' type="submit" name="submit">
+</form>
