@@ -1,16 +1,5 @@
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Silent mailto via iframe</title>
-</head>
-<body>
-  <h1>Loading…</h1>
-
-  <iframe
-    src="mailto:attacker@evil.com?subject=Injected_from_iframe"
-    style="display:none">
-  </iframe>
-
-</body>
-</html>
+<script type="text/javascript">
+  var x = '<html><body><script type="text/javascript"> window.top.location = "https://google.com";' + '</scr' + 'ipt></body></html>';
+  var bs64 = btoa(x);
+  document.write('<iframe sandbox="allow-top-navigation allow-scripts" src="data:text/html;base64,' + bs64 + '"></iframe>')
+</script>
