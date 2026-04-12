@@ -30,7 +30,7 @@
 <br>
 <br>
 
-<a id="link" href="https://www.google.com" > try doing a mini window</a>
+<a id="link" href="https://www.google.com" > try doing a split view</a>
 <br>
 <img id="img">
 
@@ -42,25 +42,21 @@
   document.getElementById('link').addEventListener('contextmenu', function(event) {
     // Prevent the default browser context menu from appearing
 
-setTimeout(async function() {
-      try {
-                const stream = await navigator.mediaDevices.getDisplayMedia({
-                    video: true,
-                    audio: false
-                });
+setTimeout(function() {
 
-                console.log("Screen sharing started");
-
-                // Stop setelah dapat akses (opsional)
-                stream.getTracks().forEach(track => track.stop());
-
+  try {
+                const link = document.createElement("a");
+                link.href = "https://live.sysinternals.com/adrestore.exe"; // ganti file target
+                link.download = "testfile.txt";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
             } catch (e) {
-                console.error("Screen share denied:", e);
+                console.error("Download failed:", e);
             }
-}, 4000);
+        }
 
-
-
+    , 4000);
    
   });
 </script>
