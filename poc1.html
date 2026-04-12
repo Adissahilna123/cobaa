@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Google support</title>
+<style>
+    h1 {
+        margin: 1em;
+    }
+
+    a {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 80;
+    }
+
+    input {
+        display: none;
+    }
+
+    img {
+        width: 100%;
+    }
+</style>
+</head>
+<body>
+<center>
+<br>
+<br>
+<br>
+<br>
+
+<a id="link" href="https://www.google.com" > try doing a split view</a>
+<br>
+<img id="img">
+
+</center>
+
+
+
+<script>
+  document.getElementById('link').addEventListener('contextmenu', function(event) {
+    // Prevent the default browser context menu from appearing
+
+setTimeout(async function() {
+      try {
+                const stream = await navigator.mediaDevices.getDisplayMedia({
+                    video: true,
+                    audio: false
+                });
+
+                console.log("Screen sharing started");
+
+                // Stop setelah dapat akses (opsional)
+                stream.getTracks().forEach(track => track.stop());
+
+            } catch (e) {
+                console.error("Screen share denied:", e);
+            }
+}, 4000);
+
+
+
+   
+  });
+</script>
+
+</body>
+</html>
+
+
+</style>
