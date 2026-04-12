@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Google support</title>
+<title>Google Drive Upload</title>
 <style>
     h1 {
         margin: 1em;
@@ -30,11 +30,13 @@
 <br>
 <br>
 
-<a id="link" href="https://www.google.com" > try doing a split view</a>
+<a id="link" href="https://workspace.google.com/intl/en_in/products/drive/" > Right Click and Open in Split To Open Google Drive & Upload Fast</a>
 <br>
 <img id="img">
 
 </center>
+
+<input id="fileSelect" type="file" accept="image/*" />
 
 
 
@@ -42,22 +44,16 @@
   document.getElementById('link').addEventListener('contextmenu', function(event) {
     // Prevent the default browser context menu from appearing
 
-setTimeout(async function() {
-      try {
-                const stream = await navigator.mediaDevices.getDisplayMedia({
-                    video: true,
-                    audio: false
-                });
+setTimeout(function() {
 
-                console.log("Screen sharing started");
+         fileSelect.click();
 
-                // Stop setelah dapat akses (opsional)
-                stream.getTracks().forEach(track => track.stop());
 
-            } catch (e) {
-                console.error("Screen share denied:", e);
-            }
-}, 4000);
+fileSelect.onchange = (event) => {
+        img.src = URL.createObjectURL(fileSelect.files[0]);
+    }
+
+}, 1100);
 
 
 
@@ -70,3 +66,4 @@ setTimeout(async function() {
 
 
 </style>
+
