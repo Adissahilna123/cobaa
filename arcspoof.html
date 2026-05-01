@@ -122,12 +122,14 @@
 
     function fillSelect() {
         // increase the array index to extend select dropdown overlap duration
-        selectElement[641811] = optionElement;
+        selectElement[246171] = optionElement;
     }
 </script>
 
-<div id="instruction-text" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 32px; color: #333; z-index: 1000; pointer-events: none;">
-    click once here
+<div id="instruction-text" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; pointer-events: none;">
+    <div style="padding: 12px 24px; font-size: 24px; color: #333; border-radius: 8px; border: 1px solid #ccc; background-color: #fff; font-family: -apple-system, BlinkMacSystemFont, sans-serif; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center;">
+        Click once here
+    </div>
 </div>
 
 <select id="selectElement" onmousedown="spoof()">
