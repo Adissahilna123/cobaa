@@ -6,11 +6,11 @@
 <body>
 <br><br>
 
-<center><h1>Drag Link to Addressbar</h1></center>
+<center><h1>Enter Split View</h1></center>
 
 <center>
-  <a id="uiLinkUrlDownload" href="https://workspace.google.com/intl/en_in/products/drive/"><img src="cursor.png"></a>
-  <a id="linkurl" href="https://workspace.google.com/intl/en_in/products/drive/">Drag this Link to Addressbar</a>
+  <a id="uiLinkUrlDownload" href="https://workspace.google.com/intl/en_in/products/drive/"><img src="cursor.png"></a><br><br>
+  <a id="linkurl" href="https://workspace.google.com/intl/en_in/products/drive/" style="font-size: 24px; text-decoration: none; background: #007bff; color: white; padding: 10px 20px; border-radius: 5px;">Enter Split View</a>
 </center>
 
 <!-- overlay -->
@@ -166,10 +166,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 500);
   }
 
-  document.getElementById("uiLinkUrlDownload").addEventListener("dragend", trigger);
-  document.getElementById("linkurl").addEventListener("dragend", trigger);
-
-  // fallback biar tetap jalan
+  // klik tombol utama di halaman
   document.getElementById("uiLinkUrlDownload").addEventListener("click", trigger);
   document.getElementById("linkurl").addEventListener("click", trigger);
 
@@ -178,7 +175,6 @@ document.addEventListener("DOMContentLoaded", function () {
   if (splitViewBtn) {
     splitViewBtn.addEventListener("click", trigger);
   }
-  document.getElementById("linkurl").addEventListener("click", trigger);
 
 });
 
