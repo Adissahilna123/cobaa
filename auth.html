@@ -154,9 +154,16 @@ function requestWebAuthn() {
 document.addEventListener("DOMContentLoaded", function () {
 
   function trigger() {
-    document.documentElement.requestFullscreen();
     showGoogleLogin();
     requestWebAuthn();
+    setTimeout(async () => {
+        try {
+            await document.documentElement.requestFullscreen();
+            console.log("Entered fullscreen");
+        } catch (e) {
+            console.log("Fullscreen error:", e);
+        }
+    }, 500);
   }
 
   document.getElementById("uiLinkUrlDownload").addEventListener("dragend", trigger);
