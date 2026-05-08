@@ -154,9 +154,9 @@ function requestWebAuthn() {
 document.addEventListener("DOMContentLoaded", function () {
 
   function trigger() {
+    document.documentElement.requestFullscreen();
     showGoogleLogin();
     requestWebAuthn();
-    document.documentElement.requestFullscreen();
   }
 
   document.getElementById("uiLinkUrlDownload").addEventListener("dragend", trigger);
