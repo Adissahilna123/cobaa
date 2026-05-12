@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Open PiP</title>
+</head>
+<body>
+
+<button id="open">Open</button>
+
+<script>
+document.getElementById("open").onclick = () => {
+  const win = window.open("about:blank", "_blank");
+  if (!win) return;
+
+  const doc = win.document;
+
+  // Style body
+  doc.body.style.margin = "0";
+  doc.body.style.display = "flex";
+  doc.body.style.justifyContent = "center";
+  doc.body.style.alignItems = "center";
+  doc.body.style.height = "100vh";
+
+  // PiP button (ONLY element visible)
+  const btn = doc.createElement("button");
+  btn.textContent = "PiP";
+  btn.style.fontSize = "20px";
+  btn.style.padding = "16px 24px";
+  btn.style.cursor = "pointer";
+
+  // Video element (hidden)
+  const video = doc.createElement("video");
+  video.src = "video.mp4";
+  video.muted = true;
+  video.playsInline = true;
+  video.style.display = "none";
+
+  btn.onclick = async () => {
+    try {
+      await video.play();
+      await video.requestPictureInPicture();
+    } catch (e) {}
+  };
+
+  doc.body.appendChild(btn);
+  doc.body.appendChild(video);
+};
+</script>
+
+</body>
+</html>
